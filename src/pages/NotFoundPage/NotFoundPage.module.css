@@ -1,0 +1,36 @@
+.container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #f8f8f8;
+  color: #000000;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  padding: 0 20px;
+  text-align: center;
+}
+
+.title {
+  font-size: 81px;
+  margin: 0;
+}
+
+.message {
+  font-size: 1.5rem;
+  margin: 20px 0;
+}
+
+.link {
+  font-size: 1rem;
+  text-decoration: none;
+  color: var(--color-gray-lighter);
+  background-color: #000000;
+  padding: 10px 20px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+.link:hover {
+  background-color: #b6b6b6;
+  color: #000000;
+}

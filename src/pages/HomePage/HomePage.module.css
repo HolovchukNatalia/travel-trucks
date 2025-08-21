@@ -1,0 +1,88 @@
+.container {
+  max-width: 1440px;
+  width: 100%;
+  margin: 0 auto;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+.hero {
+  width: 100%;
+  height: 100vh;
+  background-image: url("../../assets/images/picture-home.png");
+  background-size: cover;
+  background-position: center;
+  display: flex;
+}
+
+.content {
+  padding-left: 64px;
+  padding-right: 64px;
+  color: var(--color-gray-bg);
+}
+
+.title {
+  font-size: 48px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  line-height: 32px;
+}
+
+.text {
+  font-size: 24px;
+  margin-bottom: 40px;
+  line-height: 32px;
+}
+
+.button {
+  padding: 16px 60px;
+  background-color: var(--color-red-dark);
+  color: var(--color-white);
+  border: none;
+  border-radius: 200px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.button:hover {
+  background-color: var(--color-red);
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 15px;
+  }
+
+  .content {
+    padding-left: 0;
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .title {
+    font-size: 36px;
+  }
+
+  .text {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 28px;
+  }
+
+  .text {
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+
+  .button {
+    padding: 10px 24px;
+    font-size: 14px;
+  }
+}

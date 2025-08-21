@@ -1,7 +1,13 @@
-import "./App.css";
+import { Suspense } from "react";
+import Loader from "../Loader/Loader.jsx";
+import RouteList from "../RouteList/RouteList.jsx";
 
 function App() {
-  return <></>;
+  return (
+    <Suspense fallback={<Loader />}>
+      <RouteList />
+    </Suspense>
+  );
 }
 
 export default App;

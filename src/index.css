@@ -1,4 +1,68 @@
 :root {
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  --color-dark: #101828;
+  --color-gray-dark: #475467;
+  --color-gray: #6c717b;
+
+  --color-red: #e44848;
+  --color-red-dark: #d84343;
+  --color-yellow: #ffc531;
+
+  --color-gray-light: #dadde1;
+  --color-gray-lighter: #f2f4f7;
+  --color-gray-bg: #f7f7f7;
+  --color-white: #ffffff;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("./assets/fonts/Inter-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("./assets/fonts/Inter-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("./assets/fonts/Inter-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+*,
+::before,
+::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  /* height: 100%; */
+  overflow: hidden;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.container {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 20px;
 }
