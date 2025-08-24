@@ -1,4 +1,4 @@
-.container {
+/* .container {
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -33,4 +33,91 @@
 .link:hover {
   background-color: #b6b6b6;
   color: #000000;
+} */
+
+.container {
+  min-height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: white;
+  color: rgb(0, 0, 0);
+  text-align: center;
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+.title {
+  font-size: clamp(8rem, 15vw, 12rem);
+  font-weight: 900;
+  margin: 0;
+  line-height: 1;
+}
+
+.message {
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  margin: 2rem 0 3rem;
+  opacity: 0.9;
+  max-width: 600px;
+}
+
+.link {
+  display: inline-block;
+  padding: 1rem 2rem;
+  background: rgba(255, 255, 255, 0.2);
+  color: rgb(0, 0, 0);
+  text-decoration: none;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(0, 0, 0, 0.3);
+}
+
+.link:hover {
+  background: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.link:active {
+  transform: translateY(0);
+}
+
+@keyframes bounce {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-30px);
+  }
+  60% {
+    transform: translateY(-15px);
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .title {
+    font-size: 6rem;
+  }
+
+  .message {
+    font-size: 1.5rem;
+    margin: 1.5rem 0 2rem;
+  }
+
+  .link {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+  }
 }

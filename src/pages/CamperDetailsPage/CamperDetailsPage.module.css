@@ -1,0 +1,192 @@
+.camperDetailsPage {
+  min-height: 100vh;
+  background-color: var(--color-white);
+  padding: 48px 0;
+}
+
+.container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 64px;
+}
+
+.description {
+  margin: 28px 0 44px 0;
+}
+
+.description p {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  color: #475467;
+  margin: 0;
+}
+
+.tabsNavigation {
+  width: 100%;
+  margin-bottom: 44px;
+}
+
+.contentAndForm {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+}
+
+.tabContentSection {
+  /* flex: 1 1; */
+  min-width: 0;
+}
+
+.bookingSection {
+  width: 641px;
+  flex-shrink: 0;
+}
+
+.errorContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+  padding: 20px;
+}
+
+.error {
+  text-align: center;
+  padding: 48px 32px;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  max-width: 500px;
+  width: 100%;
+}
+
+.error h2 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #101828;
+  margin: 0 0 16px 0;
+}
+
+.error p {
+  font-size: 16px;
+  color: #475467;
+  margin: 0 0 32px 0;
+  line-height: 24px;
+}
+
+.errorActions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.retryButton,
+.backButton {
+  padding: 16px 32px;
+  border-radius: 200px;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+  min-width: 120px;
+}
+
+.retryButton {
+  background: #e44848;
+  color: #ffffff;
+  border: none;
+}
+
+.retryButton:hover {
+  background: #d63384;
+}
+
+.backButton {
+  background: transparent;
+  color: #e44848;
+  border: 2px solid #e44848;
+}
+
+.backButton:hover {
+  background: #e44848;
+  color: #ffffff;
+}
+
+/* Responsive design */
+@media (max-width: 1200px) {
+  .container {
+    padding: 0 32px;
+  }
+
+  .contentAndForm {
+    gap: 60px;
+  }
+
+  .bookingSection {
+    width: 400px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .container {
+    padding: 0 24px;
+  }
+
+  .contentAndForm {
+    flex-direction: column;
+    gap: 44px;
+  }
+
+  .bookingSection {
+    width: 100%;
+    max-width: 600px;
+    align-self: center;
+  }
+
+  .camperDetailsPage {
+    padding: 32px 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 16px;
+  }
+
+  .camperDetailsPage {
+    padding: 24px 0;
+  }
+
+  .description {
+    margin: 20px 0 32px 0;
+  }
+
+  .contentAndForm {
+    gap: 32px;
+  }
+
+  .error {
+    padding: 32px 24px;
+  }
+
+  .error h2 {
+    font-size: 20px;
+  }
+
+  .errorActions {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .retryButton,
+  .backButton {
+    width: 100%;
+    max-width: 200px;
+  }
+}

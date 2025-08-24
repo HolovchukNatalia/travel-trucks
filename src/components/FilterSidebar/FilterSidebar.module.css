@@ -1,0 +1,142 @@
+.filterSidebar {
+  width: 360px;
+  flex-shrink: 0;
+  position: sticky;
+}
+
+.filterSection {
+  margin-bottom: 32px;
+}
+
+.filterLabel {
+  display: block;
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--color-gray);
+  margin-bottom: 8px;
+  line-height: 24px;
+}
+
+.locationInput {
+  position: relative;
+}
+
+.locationField {
+  width: 100%;
+  padding: 18px 18px 18px 48px;
+  border: 1px solid var(--color-gray-bg);
+  border-radius: 12px;
+  font-size: 16px;
+  color: var(--color-dark);
+  background: var(--color-gray-bg);
+}
+
+.locationField::placeholder {
+  color: var(--color-gray);
+}
+
+.locationField:focus {
+  outline: none;
+  border-color: var(--color-red);
+}
+
+.locationField:focus::placeholder {
+  color: transparent;
+}
+
+.locationIcon {
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px;
+}
+
+.divider {
+  padding-bottom: 32px;
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--color-gray);
+  line-height: 24px;
+}
+
+.sectionTitle {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--color-dark);
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--color-gray-light);
+}
+
+.equipmentGrid,
+.vehicleTypeGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 24px;
+}
+
+.actionButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.searchButton {
+  width: 166px;
+  background: #e44848;
+  color: white;
+  border: none;
+  padding: 16px;
+  border-radius: 200px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.searchButton:hover:not(:disabled) {
+  background: #d32f2f;
+}
+
+.searchButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.clearButton {
+  width: 100%;
+  background: transparent;
+  color: #e44848;
+  border: 2px solid #e44848;
+  padding: 16px;
+  border-radius: 200px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.clearButton:hover {
+  background: #e44848;
+  color: white;
+}
+
+@media (max-width: 1024px) {
+  .filterSidebar {
+    width: 100%;
+    position: static;
+  }
+
+  .equipmentGrid,
+  .vehicleTypeGrid {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .filterSidebar {
+    padding: 24px 16px;
+  }
+}

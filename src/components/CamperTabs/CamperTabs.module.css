@@ -1,0 +1,45 @@
+.camperTabs {
+  width: 100%;
+}
+
+.tabNav {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--color-gray-light);
+  width: 100%;
+}
+
+.tabButton {
+  background: transparent;
+  border: none;
+  padding: 0 0 24px 0;
+  margin-right: 40px;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 24px;
+  color: var(--color-dark);
+  cursor: pointer;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.tabButton:last-child {
+  margin-right: 0;
+}
+
+.tabButton.active::after {
+  content: "";
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: var(--color-red);
+}
+
+@media (max-width: 768px) {
+  .tabButton {
+    margin-right: 24px;
+    font-size: 18px;
+  }
+}

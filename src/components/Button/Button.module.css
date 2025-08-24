@@ -1,0 +1,39 @@
+.searchButton {
+  width: 166px;
+  background: var(--color-red);
+  color: var(--color-white);
+  border: none;
+  padding: 16px;
+  border-radius: 200px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.searchButton:hover:not(:disabled) {
+  background: var(--color-red-dark);
+}
+
+.searchButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.clearButton {
+  width: 166px;
+  background: transparent;
+  color: #e44848;
+  border: 2px solid #e44848;
+  padding: 16px;
+  border-radius: 200px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.clearButton:hover {
+  background: #e44848;
+  color: white;
+}

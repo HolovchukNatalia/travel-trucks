@@ -1,0 +1,35 @@
+.filterButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 112px;
+  height: 96px;
+  border: 1px solid var(--color-gray-light);
+  border-radius: 12px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 16px;
+  letter-spacing: -0.5px;
+  font-weight: 500;
+  color: var(--color-dark);
+  padding: 4px 16px;
+}
+
+.filterButton:hover {
+  border-color: #e44848;
+}
+
+.active {
+  border-color: #e44848;
+}
+
+.iconWrapper {
+  margin-bottom: 8px;
+}
+
+.iconWrapper img {
+  width: 32px;
+  height: 32px;
+}
