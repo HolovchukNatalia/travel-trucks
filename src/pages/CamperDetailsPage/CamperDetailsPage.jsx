@@ -13,18 +13,16 @@ import css from "./CamperDetailsPage.module.css";
 const CamperDetailsPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const location = useLocation(); // Використання useLocation
+  const location = useLocation();
   const [camper, setCamper] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Встановлення початкової вкладки на основі URL-хешу
   const [activeTab, setActiveTab] = useState(
     location.hash === "#reviews" ? "reviews" : "features"
   );
 
   useEffect(() => {
-    // Встановлення вкладки при першому завантаженні або зміні URL-хешу
     if (location.hash) {
       setActiveTab(location.hash.substring(1));
     }
@@ -46,11 +44,10 @@ const CamperDetailsPage = () => {
     if (id) {
       loadCamperDetails();
     }
-  }, [id, location.hash]); // Додано location.hash як залежність
+  }, [id, location.hash]);
 
   const handleTabChange = (tabId) => {
     setActiveTab(tabId);
-    // Оновлення URL-хешу при зміні вкладки
     navigate(
       { hash: tabId === "reviews" ? "#reviews" : "" },
       { replace: true }

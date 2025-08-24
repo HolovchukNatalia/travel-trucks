@@ -27,7 +27,6 @@ const CatalogPage = () => {
   } = useSelector((state) => state.campers);
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // Функція для перетворення параметрів з URL в об'єкт фільтрів для Redux та API
   const getFiltersFromUrl = useCallback(() => {
     const urlFilters = {};
     const location = searchParams.get("location");
@@ -49,7 +48,6 @@ const CatalogPage = () => {
     return urlFilters;
   }, [searchParams]);
 
-  // Цей хук реагує на зміни в URL. При зміні URL, він скидає стан і завантажує нові дані.
   useEffect(() => {
     const apiFilters = getFiltersFromUrl();
     dispatch(setAllFilters(apiFilters));
