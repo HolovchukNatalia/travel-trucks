@@ -27,21 +27,6 @@
   margin: 0;
 }
 
-.successMessage {
-  background: #d1fadf;
-  border: 1px solid #84d187;
-  border-radius: 8px;
-  padding: 12px 16px;
-  margin-bottom: 24px;
-}
-
-.successMessage p {
-  color: #027a48;
-  font-size: 14px;
-  font-weight: 500;
-  margin: 0;
-}
-
 .form {
   display: flex;
   flex-direction: column;
@@ -122,6 +107,10 @@
   transition: background-color 0.3s ease;
   margin: 10px auto 0;
   width: 166px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .submitButton:hover {
@@ -140,7 +129,6 @@
   background: #f2f4f7;
 }
 
-/* Date input specific styles */
 .input[type="date"] {
   position: relative;
   color: #101828;
@@ -178,7 +166,6 @@
   }
 }
 
-/* DatePicker основний інпут */
 .datePicker {
   width: 100%;
   position: relative;

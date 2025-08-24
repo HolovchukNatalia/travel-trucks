@@ -49,13 +49,7 @@
 }
 
 .reviewCount {
-  text-decoration: underline;
-  cursor: pointer;
   color: var(--color-dark);
-}
-
-.reviewCount:hover {
-  color: var(--color-gray-dark);
 }
 
 .price {

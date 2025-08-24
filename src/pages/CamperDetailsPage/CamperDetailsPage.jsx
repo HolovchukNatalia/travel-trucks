@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom"; // Додано useLocation
 import { campersAPI } from "../../api/apiCampers.js";
 import ImageGallery from "../../components/ImageGallery/ImageGallery";
 import CamperInfo from "../../components/CamperInfo/CamperInfo";
@@ -13,12 +13,22 @@ import css from "./CamperDetailsPage.module.css";
 const CamperDetailsPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation(); // Використання useLocation
   const [camper, setCamper] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [activeTab, setActiveTab] = useState("features");
+
+  // Встановлення початкової вкладки на основі URL-хешу
+  const [activeTab, setActiveTab] = useState(
+    location.hash === "#reviews" ? "reviews" : "features"
+  );
 
   useEffect(() => {
+    // Встановлення вкладки при першому завантаженні або зміні URL-хешу
+    if (location.hash) {
+      setActiveTab(location.hash.substring(1));
+    }
+
     const loadCamperDetails = async () => {
       try {
         setLoading(true);
@@ -36,10 +46,15 @@ const CamperDetailsPage = () => {
     if (id) {
       loadCamperDetails();
     }
-  }, [id]);
+  }, [id, location.hash]); // Додано location.hash як залежність
 
   const handleTabChange = (tabId) => {
     setActiveTab(tabId);
+    // Оновлення URL-хешу при зміні вкладки
+    navigate(
+      { hash: tabId === "reviews" ? "#reviews" : "" },
+      { replace: true }
+    );
   };
 
   if (loading) {

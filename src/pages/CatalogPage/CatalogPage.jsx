@@ -1,24 +1,23 @@
-// pages/CatalogPage/CatalogPage.jsx
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useCallback } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useSearchParams } from "react-router-dom";
 import {
   fetchCampers,
-  loadMoreCampers,
   resetCampers,
   clearError,
 } from "../../store/slices/campersSlice";
-import { loadFiltersFromStorage } from "../../store/slices/filtersSlice";
-import { loadFavoritesFromStorage } from "../../store/slices/favoritesSlice";
+import {
+  setAllFilters,
+  clearFilters as resetReduxFilters,
+} from "../../store/slices/filtersSlice";
 import CamperCard from "../../components/CamperCard/CamperCard.jsx";
-import FilterSidebar from "../../components/FilterSidebar/FilterSidebar";
+import FilterSidebar from "../../components/FilterSidebar/FilterSidebar.jsx";
 import Loader from "../../components/Loader/Loader.jsx";
 import css from "./CatalogPage.module.css";
 import Button from "../../components/Button/Button.jsx";
-import { store } from "../../store/index.js";
 
 const CatalogPage = () => {
   const dispatch = useDispatch();
-
   const {
     items: campers,
     loading,
@@ -26,40 +25,78 @@ const CatalogPage = () => {
     currentPage,
     hasMore,
   } = useSelector((state) => state.campers);
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const { appliedFilters } = useSelector((state) => state.filters);
+  // Функція для перетворення параметрів з URL в об'єкт фільтрів для Redux та API
+  const getFiltersFromUrl = useCallback(() => {
+    const urlFilters = {};
+    const location = searchParams.get("location");
+    if (location) urlFilters.location = location;
 
+    const equipmentParam = searchParams.get("equipment");
+    if (equipmentParam) {
+      const equipmentKeys = equipmentParam.split(",");
+      if (equipmentKeys.includes("AC")) urlFilters.AC = true;
+      if (equipmentKeys.includes("automatic")) urlFilters.automatic = true;
+      if (equipmentKeys.includes("kitchen")) urlFilters.kitchen = true;
+      if (equipmentKeys.includes("TV")) urlFilters.TV = true;
+      if (equipmentKeys.includes("bathroom")) urlFilters.bathroom = true;
+    }
+
+    const form = searchParams.get("form");
+    if (form) urlFilters.form = form;
+
+    return urlFilters;
+  }, [searchParams]);
+
+  // Цей хук реагує на зміни в URL. При зміні URL, він скидає стан і завантажує нові дані.
   useEffect(() => {
-    dispatch(loadFiltersFromStorage());
-    dispatch(loadFavoritesFromStorage());
-    setTimeout(() => {
-      const state = store.getState();
-      const savedFilters = state.filters.appliedFilters || {};
-      dispatch(fetchCampers({ page: 1, limit: 4, ...savedFilters }));
-    }, 0);
-  }, [dispatch]);
-
-  const handleFilterChange = (newFilters) => {
-    console.log("Applying new filters:", newFilters);
+    const apiFilters = getFiltersFromUrl();
+    dispatch(setAllFilters(apiFilters));
     dispatch(resetCampers());
-    dispatch(fetchCampers({ page: 1, limit: 4, ...newFilters }));
-  };
+    dispatch(fetchCampers({ page: 1, limit: 4, filters: apiFilters }));
+  }, [dispatch, getFiltersFromUrl, searchParams]);
 
   const handleLoadMore = () => {
     if (hasMore && !loading) {
+      const apiFilters = getFiltersFromUrl();
       dispatch(
-        loadMoreCampers({
-          page: currentPage + 1,
-          limit: 4,
-          ...appliedFilters,
-        })
+        fetchCampers({ page: currentPage + 1, limit: 4, filters: apiFilters })
       );
     }
   };
 
+  const handleFilterChange = (newFilters) => {
+    const params = new URLSearchParams();
+    if (newFilters.location) {
+      params.set("location", newFilters.location);
+    }
+
+    const equipment = [];
+    if (newFilters.AC) equipment.push("AC");
+    if (newFilters.automatic) equipment.push("automatic");
+    if (newFilters.kitchen) equipment.push("kitchen");
+    if (newFilters.TV) equipment.push("TV");
+    if (newFilters.bathroom) equipment.push("bathroom");
+    if (equipment.length > 0) {
+      params.set("equipment", equipment.join(","));
+    }
+
+    if (newFilters.form) {
+      params.set("form", newFilters.form);
+    }
+    setSearchParams(params);
+  };
+
+  const handleClearFilters = () => {
+    dispatch(resetReduxFilters());
+    setSearchParams({});
+  };
+
   const handleRetry = () => {
     dispatch(clearError());
-    dispatch(fetchCampers({ page: 1, limit: 4, ...appliedFilters }));
+    const apiFilters = getFiltersFromUrl();
+    dispatch(fetchCampers({ page: 1, limit: 4, filters: apiFilters }));
   };
 
   if (loading && campers.length === 0) {
@@ -69,7 +106,11 @@ const CatalogPage = () => {
   return (
     <div className={css.catalogPage}>
       <div className={css.container}>
-        <FilterSidebar onFilterChange={handleFilterChange} loading={loading} />
+        <FilterSidebar
+          onFilterChange={handleFilterChange}
+          onClearFilters={handleClearFilters}
+          loading={loading}
+        />
 
         <div className={css.content}>
           {error && (
@@ -91,7 +132,7 @@ const CatalogPage = () => {
             <>
               <div className={css.campersList}>
                 {campers.map((camper) => (
-                  <CamperCard key={camper.id} camper={camper} />
+                  <CamperCard key={camper._id} camper={camper} />
                 ))}
               </div>
 

@@ -138,7 +138,9 @@ const CamperCard = ({ camper }) => {
             <img src={ratingAc} alt="star" />
             {rating}
           </span>
-          <span className={css.reviewCount}>({reviewCount} Reviews)</span>
+          <Link to={`/catalog/${id}#reviews`} className={css.reviewCountLink}>
+            ({reviewCount} Reviews)
+          </Link>
           <span className={css.location}>
             <img src={located} alt="" /> {location}
           </span>

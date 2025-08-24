@@ -103,14 +103,19 @@
   gap: 4px;
   vertical-align: middle;
   height: 16px;
+  text-decoration: underline;
 }
 
-.reviewCount {
+.reviewCountLink {
+  text-decoration: underline;
+  cursor: pointer;
   color: var(--color-dark);
-  font-weight: 400;
-  margin-right: 16px;
+  padding-right: 16px;
 }
 
+.reviewCountLink:hover {
+  color: var(--color-gray-dark);
+}
 .location {
   color: var(--color-dark);
   font-weight: 400;
