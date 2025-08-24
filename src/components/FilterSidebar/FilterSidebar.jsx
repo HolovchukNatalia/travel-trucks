@@ -1,4 +1,11 @@
-import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setLocation,
+  toggleEquipment,
+  setVehicleType,
+  clearFilters,
+  selectCurrentFilters,
+} from "../../store/slices/filtersSlice";
 import css from "./FilterSidebar.module.css";
 import FilterButton from "../FilterButton/FilterButton.jsx";
 import Button from "../Button/Button.jsx";
@@ -28,29 +35,19 @@ const vehicleTypes = [
 ];
 
 const FilterSidebar = ({ onFilterChange, loading }) => {
-  const [filters, setFilters] = useState({
-    location: "",
-    AC: false,
-    automatic: false,
-    kitchen: false,
-    TV: false,
-    bathroom: false,
-    form: "",
-  });
+  const dispatch = useDispatch();
+  const filters = useSelector(selectCurrentFilters);
 
   const handleLocationChange = (e) => {
-    setFilters({ ...filters, location: e.target.value });
+    dispatch(setLocation(e.target.value));
   };
 
   const handleEquipmentChange = (equipment) => {
-    setFilters({ ...filters, [equipment]: !filters[equipment] });
+    dispatch(toggleEquipment(equipment));
   };
 
   const handleVehicleTypeChange = (type) => {
-    setFilters({
-      ...filters,
-      form: filters.form === type ? "" : type,
-    });
+    dispatch(setVehicleType(type));
   };
 
   const handleSearch = () => {
@@ -64,20 +61,12 @@ const FilterSidebar = ({ onFilterChange, loading }) => {
     if (filters.bathroom) apiFilters.bathroom = true;
     if (filters.form) apiFilters.form = filters.form;
 
+    console.log("Sending filters to parent:", apiFilters); // Для дебагінгу
     onFilterChange(apiFilters);
   };
 
-  const clearFilters = () => {
-    const cleared = {
-      location: "",
-      AC: false,
-      automatic: false,
-      kitchen: false,
-      TV: false,
-      bathroom: false,
-      form: "",
-    };
-    setFilters(cleared);
+  const handleClearFilters = () => {
+    dispatch(clearFilters());
     onFilterChange({});
   };
 
@@ -136,7 +125,7 @@ const FilterSidebar = ({ onFilterChange, loading }) => {
           Search
         </Button>
 
-        <Button onClick={clearFilters} variant="secondary">
+        <Button onClick={handleClearFilters} variant="secondary">
           Clear filters
         </Button>
       </div>

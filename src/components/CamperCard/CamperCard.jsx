@@ -1,5 +1,10 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  toggleFavorite,
+  selectIsFavorite,
+} from "../../store/slices/favoritesSlice";
+
 import css from "./CamperCard.module.css";
 import favourite from "../../assets/icons/favourite.svg";
 import favouriteActive from "../../assets/icons/favouriteActive.svg";
@@ -20,8 +25,8 @@ import engineIcon from "../../assets/icons/group.svg";
 import bathroomIcon from "../../assets/icons/ph_shower.svg";
 
 const CamperCard = ({ camper }) => {
-  const [isFavorite, setIsFavorite] = useState(false);
-  const [imageError, setImageError] = useState(false);
+  const dispatch = useDispatch();
+  const isFavorite = useSelector((state) => selectIsFavorite(state, camper.id));
 
   const {
     id,
@@ -48,10 +53,6 @@ const CamperCard = ({ camper }) => {
   const mainImage = gallery && gallery[0] ? gallery[0].thumb : "";
   const reviewCount = reviews ? reviews.length : 0;
 
-  const toggleFavorite = () => {
-    setIsFavorite(!isFavorite);
-  };
-
   const formatPrice = (price) => `€${price.toFixed(2)}`;
 
   const getFeatures = () => {
@@ -64,41 +65,14 @@ const CamperCard = ({ camper }) => {
         icon: automaticIcon,
       });
     if (engine)
-      features.push({
-        key: "engine",
-        label: engine,
-        icon: engineIcon,
-      });
-    if (AC)
-      features.push({
-        key: "AC",
-        label: "AC",
-        icon: acIcon,
-      });
+      features.push({ key: "engine", label: engine, icon: engineIcon });
+    if (AC) features.push({ key: "AC", label: "AC", icon: acIcon });
     if (bathroom)
-      features.push({
-        key: "bathroom",
-        label: "Bathroom",
-        icon: bathroomIcon,
-      });
+      features.push({ key: "bathroom", label: "Bathroom", icon: bathroomIcon });
     if (kitchen)
-      features.push({
-        key: "kitchen",
-        label: "Kitchen",
-        icon: cupHotIcon,
-      });
-    if (TV)
-      features.push({
-        key: "TV",
-        label: "TV",
-        icon: tvIcon,
-      });
-    if (radio)
-      features.push({
-        key: "radio",
-        label: "Radio",
-        icon: radioIcon,
-      });
+      features.push({ key: "kitchen", label: "Kitchen", icon: cupHotIcon });
+    if (TV) features.push({ key: "TV", label: "TV", icon: tvIcon });
+    if (radio) features.push({ key: "radio", label: "Radio", icon: radioIcon });
     if (refrigerator)
       features.push({
         key: "refrigerator",
@@ -111,12 +85,7 @@ const CamperCard = ({ camper }) => {
         label: "Microwave",
         icon: microwaveIcon,
       });
-    if (gas)
-      features.push({
-        key: "gas",
-        label: "Gas",
-        icon: gasStoveIcon,
-      });
+    if (gas) features.push({ key: "gas", label: "Gas", icon: gasStoveIcon });
     if (water)
       features.push({
         key: "water",
@@ -132,13 +101,8 @@ const CamperCard = ({ camper }) => {
   return (
     <div className={css.camperCard}>
       <div className={css.imageContainer}>
-        {!imageError && mainImage ? (
-          <img
-            src={mainImage}
-            alt={name}
-            className={css.camperImage}
-            onError={() => setImageError(true)}
-          />
+        {mainImage ? (
+          <img src={mainImage} alt={name} className={css.camperImage} />
         ) : (
           <div className={css.imagePlaceholder}>
             <span>No image available</span>
@@ -152,7 +116,7 @@ const CamperCard = ({ camper }) => {
           <div className={css.priceContainer}>
             <span className={css.price}>{formatPrice(price)}</span>
             <button
-              onClick={toggleFavorite}
+              onClick={() => dispatch(toggleFavorite(camper.id))}
               className={`${css.favoriteButton} ${
                 isFavorite ? css.active : ""
               }`}

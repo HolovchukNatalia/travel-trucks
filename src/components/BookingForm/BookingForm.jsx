@@ -85,7 +85,6 @@ const BookingForm = ({ camper }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("=== FORM SUBMISSION DEBUG ===");
     console.log("Form data:", formData);
     console.log("Camper prop:", camper);
 

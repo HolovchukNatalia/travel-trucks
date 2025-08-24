@@ -13,7 +13,12 @@ const CamperInfo = ({ camper }) => {
     setIsFavorite(!isFavorite);
   };
 
-  const formatPrice = (price) => `€${price.toFixed(2)}`;
+  const formatPrice = (price) => {
+    if (typeof price === "number") {
+      return `€${price.toFixed(2)}`;
+    }
+    return "—";
+  };
 
   return (
     <div className={css.camperInfo}>

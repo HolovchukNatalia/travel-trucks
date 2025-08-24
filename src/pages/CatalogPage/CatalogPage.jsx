@@ -1,66 +1,65 @@
-import { useState, useEffect } from "react";
-import { campersAPI } from "../../api/apiCampers.js";
+// pages/CatalogPage/CatalogPage.jsx
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchCampers,
+  loadMoreCampers,
+  resetCampers,
+  clearError,
+} from "../../store/slices/campersSlice";
+import { loadFiltersFromStorage } from "../../store/slices/filtersSlice";
+import { loadFavoritesFromStorage } from "../../store/slices/favoritesSlice";
 import CamperCard from "../../components/CamperCard/CamperCard.jsx";
 import FilterSidebar from "../../components/FilterSidebar/FilterSidebar";
 import Loader from "../../components/Loader/Loader.jsx";
 import css from "./CatalogPage.module.css";
 import Button from "../../components/Button/Button.jsx";
+import { store } from "../../store/index.js";
 
 const CatalogPage = () => {
-  const [campers, setCampers] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [filters, setFilters] = useState({});
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalItems, setTotalItems] = useState(0);
-  const [hasMore, setHasMore] = useState(true);
+  const dispatch = useDispatch();
 
-  const ITEMS_PER_PAGE = 4;
+  const {
+    items: campers,
+    loading,
+    error,
+    currentPage,
+    hasMore,
+  } = useSelector((state) => state.campers);
 
-  const loadCampers = async (page = 1, appliedFilters = {}, append = false) => {
-    try {
-      setLoading(true);
-      setError(null);
-
-      const params = {
-        page,
-        limit: ITEMS_PER_PAGE,
-        ...appliedFilters,
-      };
-
-      const data = await campersAPI.getCampers(params);
-
-      if (append) {
-        setCampers((prev) => [...prev, ...data.items]);
-      } else {
-        setCampers(data.items);
-      }
-
-      setTotalItems(data.total);
-      setHasMore(data.items.length === ITEMS_PER_PAGE);
-      setCurrentPage(page);
-    } catch (err) {
-      setError(err.message);
-      console.error("Error loading campers:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { appliedFilters } = useSelector((state) => state.filters);
 
   useEffect(() => {
-    loadCampers(1, filters);
-  }, []);
+    dispatch(loadFiltersFromStorage());
+    dispatch(loadFavoritesFromStorage());
+    setTimeout(() => {
+      const state = store.getState();
+      const savedFilters = state.filters.appliedFilters || {};
+      dispatch(fetchCampers({ page: 1, limit: 4, ...savedFilters }));
+    }, 0);
+  }, [dispatch]);
 
   const handleFilterChange = (newFilters) => {
-    setFilters(newFilters);
-    setCurrentPage(1);
-    loadCampers(1, newFilters);
+    console.log("Applying new filters:", newFilters);
+    dispatch(resetCampers());
+    dispatch(fetchCampers({ page: 1, limit: 4, ...newFilters }));
   };
 
-  const loadMoreCampers = () => {
+  const handleLoadMore = () => {
     if (hasMore && !loading) {
-      loadCampers(currentPage + 1, filters, true);
+      dispatch(
+        loadMoreCampers({
+          page: currentPage + 1,
+          limit: 4,
+          ...appliedFilters,
+        })
+      );
     }
+  };
+
+  const handleRetry = () => {
+    dispatch(clearError());
+    dispatch(fetchCampers({ page: 1, limit: 4, ...appliedFilters }));
   };
 
   if (loading && campers.length === 0) {
@@ -76,10 +75,7 @@ const CatalogPage = () => {
           {error && (
             <div className={css.error}>
               <p>Error loading campers: {error}</p>
-              <button
-                onClick={() => loadCampers(1, filters)}
-                className={css.retryButton}
-              >
+              <button onClick={handleRetry} className={css.retryButton}>
                 Try again
               </button>
             </div>
@@ -102,7 +98,7 @@ const CatalogPage = () => {
               {hasMore && (
                 <div className={css.loadMoreContainer}>
                   <Button
-                    onClick={loadMoreCampers}
+                    onClick={handleLoadMore}
                     loading={loading}
                     variant="primary"
                     className={css.loadMoreButton}
