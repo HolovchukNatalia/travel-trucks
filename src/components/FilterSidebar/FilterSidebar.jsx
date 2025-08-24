@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   setLocation,
   toggleEquipment,
+  setTransmission,
   setVehicleType,
   clearFilters,
   selectCurrentFilters,
@@ -22,7 +23,7 @@ import alcoveIcon from "../../assets/icons/bi_grid-3x3-gap.svg";
 
 const equipmentOptions = [
   { key: "AC", label: "AC", icon: acIcon },
-  { key: "automatic", label: "Automatic", icon: automaticIcon },
+  { key: "transmission", label: "Automatic", icon: automaticIcon },
   { key: "kitchen", label: "Kitchen", icon: kitchenIcon },
   { key: "TV", label: "TV", icon: tvIcon },
   { key: "bathroom", label: "Bathroom", icon: bathroomIcon },
@@ -43,7 +44,11 @@ const FilterSidebar = ({ onFilterChange, loading }) => {
   };
 
   const handleEquipmentChange = (equipment) => {
-    dispatch(toggleEquipment(equipment));
+    if (equipment === "transmission") {
+      dispatch(setTransmission("automatic"));
+    } else {
+      dispatch(toggleEquipment(equipment));
+    }
   };
 
   const handleVehicleTypeChange = (type) => {
@@ -52,17 +57,24 @@ const FilterSidebar = ({ onFilterChange, loading }) => {
 
   const handleSearch = () => {
     const apiFilters = {};
-
     if (filters.location.trim()) apiFilters.location = filters.location.trim();
     if (filters.AC) apiFilters.AC = true;
-    if (filters.automatic) apiFilters.transmission = "automatic";
+    if (filters.transmission) apiFilters.transmission = filters.transmission;
     if (filters.kitchen) apiFilters.kitchen = true;
     if (filters.TV) apiFilters.TV = true;
     if (filters.bathroom) apiFilters.bathroom = true;
     if (filters.form) apiFilters.form = filters.form;
 
-    console.log("Sending filters to parent:", apiFilters); // Для дебагінгу
-    onFilterChange(apiFilters);
+    // Перетворення булевих значень на рядки для URL
+    const urlFilters = {};
+    for (const key in apiFilters) {
+      if (typeof apiFilters[key] === "boolean") {
+        urlFilters[key] = apiFilters[key].toString();
+      } else {
+        urlFilters[key] = apiFilters[key];
+      }
+    }
+    onFilterChange(urlFilters);
   };
 
   const handleClearFilters = () => {
@@ -96,7 +108,11 @@ const FilterSidebar = ({ onFilterChange, loading }) => {
           {equipmentOptions.map(({ key, label, icon }) => (
             <FilterButton
               key={key}
-              active={filters[key]}
+              active={
+                key === "transmission"
+                  ? filters.transmission === "automatic"
+                  : filters[key]
+              }
               onClick={() => handleEquipmentChange(key)}
               icon={icon}
               label={label}
@@ -124,7 +140,6 @@ const FilterSidebar = ({ onFilterChange, loading }) => {
         <Button onClick={handleSearch} loading={loading}>
           Search
         </Button>
-
         <Button onClick={handleClearFilters} variant="secondary">
           Clear filters
         </Button>

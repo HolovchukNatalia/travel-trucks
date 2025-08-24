@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { loadFiltersFromStorage } from "../../store/slices/filtersSlice";
+// import { loadFiltersFromStorage } from "../../store/slices/filtersSlice";
 import { loadFavoritesFromStorage } from "../../store/slices/favoritesSlice";
 import Loader from "../Loader/Loader.jsx";
 import RouteList from "../../routes/AppRoutes.jsx";
@@ -12,7 +12,6 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(loadFiltersFromStorage());
     dispatch(loadFavoritesFromStorage());
   }, [dispatch]);
   return (

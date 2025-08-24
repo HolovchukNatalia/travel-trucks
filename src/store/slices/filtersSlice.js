@@ -1,43 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const getFiltersFromStorage = () => {
-  try {
-    const filters = localStorage.getItem("camper_filters");
-    return filters
-      ? JSON.parse(filters)
-      : {
-          location: "",
-          AC: false,
-          automatic: false,
-          kitchen: false,
-          TV: false,
-          bathroom: false,
-          form: "",
-        };
-  } catch (error) {
-    console.error("Error loading filters from localStorage:", error);
-    return {
-      location: "",
-      AC: false,
-      automatic: false,
-      kitchen: false,
-      TV: false,
-      bathroom: false,
-      form: "",
-    };
-  }
-};
-
-const saveFiltersToStorage = (filters) => {
-  try {
-    localStorage.setItem("camper_filters", JSON.stringify(filters));
-  } catch (error) {
-    console.error("Error saving filters to localStorage:", error);
-  }
-};
-
 const initialState = {
-  ...getFiltersFromStorage(),
+  location: "",
+  AC: false,
+  transmission: "",
+  kitchen: false,
+  TV: false,
+  bathroom: false,
+  form: "",
   appliedFilters: {},
 };
 
@@ -45,52 +15,21 @@ const filtersSlice = createSlice({
   name: "filters",
   initialState,
   reducers: {
-    setLocation: (state, action) => {
-      state.location = action.payload;
-      saveFiltersToStorage({
-        location: state.location,
-        AC: state.AC,
-        automatic: state.automatic,
-        kitchen: state.kitchen,
-        TV: state.TV,
-        bathroom: state.bathroom,
-        form: state.form,
-      });
-    },
-    toggleEquipment: (state, action) => {
-      const equipment = action.payload;
-      state[equipment] = !state[equipment];
-      saveFiltersToStorage({
-        location: state.location,
-        AC: state.AC,
-        automatic: state.automatic,
-        kitchen: state.kitchen,
-        TV: state.TV,
-        bathroom: state.bathroom,
-        form: state.form,
-      });
-    },
-    setVehicleType: (state, action) => {
-      const newType = action.payload;
-      state.form = state.form === newType ? "" : newType;
-      saveFiltersToStorage({
-        location: state.location,
-        AC: state.AC,
-        automatic: state.automatic,
-        kitchen: state.kitchen,
-        TV: state.TV,
-        bathroom: state.bathroom,
-        form: state.form,
-      });
-    },
-    applyFilters: (state) => {
-      const apiFilters = {};
+    loadFiltersFromUrl: (state, action) => {
+      const filters = action.payload;
 
-      if (state.location.trim()) {
-        apiFilters.location = state.location.trim();
-      }
+      state.location = filters.location || "";
+      state.AC = filters.AC === "true";
+      state.transmission = filters.transmission || "";
+      state.kitchen = filters.kitchen === "true";
+      state.TV = filters.TV === "true";
+      state.bathroom = filters.bathroom === "true";
+      state.form = filters.form || "";
+
+      const apiFilters = {};
+      if (state.location.trim()) apiFilters.location = state.location.trim();
       if (state.AC) apiFilters.AC = true;
-      if (state.automatic) apiFilters.transmission = "automatic";
+      if (state.transmission) apiFilters.transmission = state.transmission;
       if (state.kitchen) apiFilters.kitchen = true;
       if (state.TV) apiFilters.TV = true;
       if (state.bathroom) apiFilters.bathroom = true;
@@ -98,68 +37,39 @@ const filtersSlice = createSlice({
 
       state.appliedFilters = apiFilters;
     },
+    setLocation: (state, action) => {
+      state.location = action.payload;
+    },
+    toggleEquipment: (state, action) => {
+      const equipment = action.payload;
+      state[equipment] = !state[equipment];
+    },
+    setTransmission: (state, action) => {
+      state.transmission =
+        state.transmission === action.payload ? "" : action.payload;
+    },
+    setVehicleType: (state, action) => {
+      state.form = state.form === action.payload ? "" : action.payload;
+    },
     clearFilters: (state) => {
-      state.location = "";
-      state.AC = false;
-      state.automatic = false;
-      state.kitchen = false;
-      state.TV = false;
-      state.bathroom = false;
-      state.form = "";
-      state.appliedFilters = {};
-      try {
-        localStorage.removeItem("camper_filters");
-      } catch (error) {
-        console.error("Error clearing filters from localStorage:", error);
-      }
-    },
-    setAllFilters: (state, action) => {
-      const filters = action.payload;
-      state.location = filters.location || "";
-      state.AC = filters.AC || false;
-      state.automatic = filters.transmission === "automatic";
-      state.kitchen = filters.kitchen || false;
-      state.TV = filters.TV || false;
-      state.bathroom = filters.bathroom || false;
-      state.form = filters.form || "";
-
-      saveFiltersToStorage({
-        location: state.location,
-        AC: state.AC,
-        automatic: state.automatic,
-        kitchen: state.kitchen,
-        TV: state.TV,
-        bathroom: state.bathroom,
-        form: state.form,
-      });
-    },
-    loadFiltersFromStorage: (state) => {
-      const savedFilters = getFiltersFromStorage();
-      state.location = savedFilters.location;
-      state.AC = savedFilters.AC;
-      state.automatic = savedFilters.automatic;
-      state.kitchen = savedFilters.kitchen;
-      state.TV = savedFilters.TV;
-      state.bathroom = savedFilters.bathroom;
-      state.form = savedFilters.form;
+      Object.assign(state, initialState);
     },
   },
 });
 
 export const {
+  loadFiltersFromUrl,
   setLocation,
   toggleEquipment,
+  setTransmission,
   setVehicleType,
-  applyFilters,
   clearFilters,
-  setAllFilters,
-  loadFiltersFromStorage,
 } = filtersSlice.actions;
 
 export const selectCurrentFilters = (state) => ({
   location: state.filters.location,
   AC: state.filters.AC,
-  automatic: state.filters.automatic,
+  transmission: state.filters.transmission,
   kitchen: state.filters.kitchen,
   TV: state.filters.TV,
   bathroom: state.filters.bathroom,
