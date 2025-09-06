@@ -2,18 +2,17 @@
   width: 100%;
   background-color: var(--color-gray-bg);
   padding: 28px 0;
+  position: relative;
 }
 
 .container {
   max-width: 1440px;
   width: 100%;
   margin: 0 auto;
-  padding: 0 64px 0;
-
+  padding: 0 64px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  position: relative;
+  justify-content: space-between;
 }
 
 .nav {
@@ -23,14 +22,6 @@
   flex: 1;
 }
 
-.link {
-  text-decoration: none;
-  color: var(--color-dark);
-  font-weight: 500;
-  line-height: 24px;
-  transform: none;
-}
-
 .link,
 .active {
   text-decoration: none;
@@ -38,22 +29,72 @@
   line-height: 24px;
   color: var(--color-dark);
   transition: color 0.3s ease;
-  display: inline-block;
 }
+
 .active {
   color: var(--color-red-dark);
-  transform: none;
 }
-.link:focus,
-.link:active,
-.active:focus,
-.active:active {
-  outline: none;
-  transform: none;
-  margin: 0;
-  padding: 0;
-}
+
 .logo {
   width: 136px;
   height: auto;
+}
+
+.burger {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 25px;
+  height: 20px;
+  cursor: pointer;
+  z-index: 20;
+}
+
+.burger div {
+  width: 100%;
+  height: 3px;
+  background-color: var(--color-dark);
+  transition: all 0.3s ease;
+}
+
+.burger.open div:nth-child(1) {
+  transform: rotate(45deg) translateY(11px);
+}
+.burger.open div:nth-child(2) {
+  opacity: 0;
+}
+.burger.open div:nth-child(3) {
+  transform: rotate(-45deg) translateY(-12px);
+}
+
+.mobileNav {
+  display: none;
+  flex-direction: column;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: var(--color-gray-bg);
+  gap: 16px;
+  padding: 16px 0;
+  z-index: 10;
+  align-items: center;
+  transition: all 0.3s ease;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.mobileNav.open {
+  display: flex;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+@media (max-width: 768px) {
+  .nav {
+    display: none;
+  }
+  .burger {
+    display: flex;
+  }
 }

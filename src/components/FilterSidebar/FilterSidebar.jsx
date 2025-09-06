@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setLocation,
@@ -38,22 +39,18 @@ const vehicleTypes = [
 const FilterSidebar = ({ onFilterChange, loading }) => {
   const dispatch = useDispatch();
   const filters = useSelector(selectCurrentFilters);
+  const [isOpen, setIsOpen] = useState(false);
 
-  const handleLocationChange = (e) => {
-    dispatch(setLocation(e.target.value));
-  };
+  const toggleFilters = () => setIsOpen((prev) => !prev);
+
+  const handleLocationChange = (e) => dispatch(setLocation(e.target.value));
 
   const handleEquipmentChange = (equipment) => {
-    if (equipment === "transmission") {
-      dispatch(setTransmission("automatic"));
-    } else {
-      dispatch(toggleEquipment(equipment));
-    }
+    if (equipment === "transmission") dispatch(setTransmission("automatic"));
+    else dispatch(toggleEquipment(equipment));
   };
 
-  const handleVehicleTypeChange = (type) => {
-    dispatch(setVehicleType(type));
-  };
+  const handleVehicleTypeChange = (type) => dispatch(setVehicleType(type));
 
   const handleSearch = () => {
     const apiFilters = {};
@@ -65,86 +62,96 @@ const FilterSidebar = ({ onFilterChange, loading }) => {
     if (filters.bathroom) apiFilters.bathroom = true;
     if (filters.form) apiFilters.form = filters.form;
 
-    // Перетворення булевих значень на рядки для URL
     const urlFilters = {};
     for (const key in apiFilters) {
-      if (typeof apiFilters[key] === "boolean") {
-        urlFilters[key] = apiFilters[key].toString();
-      } else {
-        urlFilters[key] = apiFilters[key];
-      }
+      urlFilters[key] =
+        typeof apiFilters[key] === "boolean"
+          ? apiFilters[key].toString()
+          : apiFilters[key];
     }
     onFilterChange(urlFilters);
+    setIsOpen(false);
   };
 
   const handleClearFilters = () => {
     dispatch(clearFilters());
     onFilterChange({});
+    setIsOpen(false);
   };
 
   return (
-    <div className={css.filterSidebar}>
-      <div className={css.filterSection}>
-        <label className={css.filterLabel}>Location</label>
-        <div className={css.locationInput}>
-          <span className={css.locationIcon}>
-            <img src={locationIcon} alt="" />
-          </span>
-          <input
-            type="text"
-            placeholder="City"
-            value={filters.location}
-            onChange={handleLocationChange}
-            className={css.locationField}
-          />
-        </div>
-      </div>
-
-      <div className={css.divider}>Filters</div>
-
-      <div className={css.filterSection}>
-        <h3 className={css.sectionTitle}>Vehicle equipment</h3>
-        <div className={css.equipmentGrid}>
-          {equipmentOptions.map(({ key, label, icon }) => (
-            <FilterButton
-              key={key}
-              active={
-                key === "transmission"
-                  ? filters.transmission === "automatic"
-                  : filters[key]
-              }
-              onClick={() => handleEquipmentChange(key)}
-              icon={icon}
-              label={label}
-            />
-          ))}
-        </div>
-      </div>
-
-      <div className={css.filterSection}>
-        <h3 className={css.sectionTitle}>Vehicle type</h3>
-        <div className={css.vehicleTypeGrid}>
-          {vehicleTypes.map(({ key, label, icon }) => (
-            <FilterButton
-              key={key}
-              active={filters.form === key}
-              onClick={() => handleVehicleTypeChange(key)}
-              icon={icon}
-              label={label}
-            />
-          ))}
-        </div>
-      </div>
-
-      <div className={css.actionButtons}>
-        <Button onClick={handleSearch} loading={loading}>
-          Search
-        </Button>
-        <Button onClick={handleClearFilters} variant="secondary">
-          Clear filters
+    <>
+      <div className={css.mobileFilterButtonContainer}>
+        <Button onClick={toggleFilters} variant="primary">
+          Filters
         </Button>
       </div>
-    </div>
+
+      <div className={`${css.filterSidebar} ${isOpen ? css.open : ""}`}>
+        <div className={css.filterSection}>
+          <label className={css.filterLabel}>Location</label>
+          <div className={css.locationInput}>
+            <span className={css.locationIcon}>
+              <img src={locationIcon} alt="" />
+            </span>
+            <input
+              type="text"
+              placeholder="City"
+              value={filters.location}
+              onChange={handleLocationChange}
+              className={css.locationField}
+            />
+          </div>
+        </div>
+
+        <div className={css.divider}>Filters</div>
+
+        <div className={css.filterSection}>
+          <h3 className={css.sectionTitle}>Vehicle equipment</h3>
+          <div className={css.equipmentGrid}>
+            {equipmentOptions.map(({ key, label, icon }) => (
+              <FilterButton
+                key={key}
+                active={
+                  key === "transmission"
+                    ? filters.transmission === "automatic"
+                    : filters[key]
+                }
+                onClick={() => handleEquipmentChange(key)}
+                icon={icon}
+                label={label}
+              />
+            ))}
+          </div>
+        </div>
+
+        <div className={css.filterSection}>
+          <h3 className={css.sectionTitle}>Vehicle type</h3>
+          <div className={css.vehicleTypeGrid}>
+            {vehicleTypes.map(({ key, label, icon }) => (
+              <FilterButton
+                key={key}
+                active={filters.form === key}
+                onClick={() => handleVehicleTypeChange(key)}
+                icon={icon}
+                label={label}
+              />
+            ))}
+          </div>
+        </div>
+
+        <div className={css.actionButtons}>
+          <Button onClick={handleSearch} loading={loading}>
+            Search
+          </Button>
+          <Button onClick={handleClearFilters} variant="secondary">
+            Clear filters
+          </Button>
+        </div>
+      </div>
+
+      {isOpen && <div className={css.overlay} onClick={toggleFilters}></div>}
+    </>
   );
 };
 

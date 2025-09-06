@@ -92,11 +92,13 @@ const CatalogPage = () => {
 
           {campers.length > 0 && (
             <>
-              <div className={css.campersList}>
+              <ul className={css.campersList}>
                 {campers.map((camper) => (
-                  <CamperCard key={camper.id} camper={camper} />
+                  <li key={camper.id} className={css.camperListItem}>
+                    <CamperCard camper={camper} />
+                  </li>
                 ))}
-              </div>
+              </ul>
 
               {hasMore && (
                 <div className={css.loadMoreContainer}>
